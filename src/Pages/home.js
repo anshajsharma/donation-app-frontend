@@ -6,7 +6,6 @@ export class home extends Component {
   render() {
     return (
       <div>
-          AAAAAA
           <NavBar />
           <Banner />
       </div>
