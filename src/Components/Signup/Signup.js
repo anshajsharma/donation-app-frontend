@@ -1,14 +1,32 @@
-import React, { Component } from 'react'
-import { Button, Form, Grid, Header, Segment, Dropdown,Modal } from 'semantic-ui-react'
+import React,{useState} from 'react'
+import { Button, Form, Grid, Header, Segment, Dropdown,Modal,Icon } from 'semantic-ui-react'
+import "../Login/Login.css"
+import { useNavigate} from "react-router-dom";
 
-const Signup = ({handlechange,form :{form, handleChange,saveAndContinue,formError,countryOptions,open,setOpen,setForm}}) => {
+const Signup = ({form :{form, handleChange,saveAndContinue,formError,countryOptions,open,setreset,setCurrent}}) => {
 
+  setCurrent('user');
+  
+const [passwordType, setPasswordType] = useState("password");
+const [confirm,setConfirm] = useState("password");
+const [icon,setIcon] = useState("eye");
+const [confirmicon,setConfirmIcon] = useState("eye");
 
-  const handleopen = () => {
-    setOpen(false);
-    setForm({});
-    handlechange(1);
-  }
+const togglePassword = (val) =>{
+if(val === "pass")
+{
+  setPasswordType(passwordType==="password"?"text":"password");
+  setIcon(icon==="eye"?"low vision":"eye");
+
+}
+else
+{
+  setConfirm(confirm==="password"?"text":"password");
+  setConfirmIcon(confirmicon==="eye"?"low vision":"eye");
+}
+
+}
+const navigate = useNavigate();
 
 
   return (
@@ -26,11 +44,11 @@ const Signup = ({handlechange,form :{form, handleChange,saveAndContinue,formErro
         </Modal.Description>
       </Modal.Content>
       <Modal.Actions>
-        <Button onClick={handleopen}>OK</Button>
+        <Button onClick={()=>navigate("/people/login")}>Ok</Button>
       </Modal.Actions>
     </Modal>
     }
-    <Form onSubmit={saveAndContinue}>
+    <Form onSubmit={saveAndContinue} >
       <Segment>
         <Form.Input
             label='First Name'
@@ -38,7 +56,6 @@ const Signup = ({handlechange,form :{form, handleChange,saveAndContinue,formErro
             placeholder='First Name'
             value={form.firstName||""}
             onChange={handleChange}
-            // defaultValue={values.firstName}
             error={(formError.firstNameError? true: false)?{content: formError.firstNameError} : false}
           />
 
@@ -48,7 +65,6 @@ const Signup = ({handlechange,form :{form, handleChange,saveAndContinue,formErro
             value={form.lastName||""}
             placeholder='Last Name'
             onChange={handleChange}
-            // defaultValue={values.lastName}
             error={(formError.lastNameError? true: false)?{content: formError.lastNameError} : false}
           />
 
@@ -62,7 +78,6 @@ const Signup = ({handlechange,form :{form, handleChange,saveAndContinue,formErro
             type='date'
             placeholder='Date of Birth'
             onChange={handleChange}
-            // defaultValue={values.dob}
             error= {(formError.dobError? true: false)?{content: formError.dobError} : false}
           />
           <Dropdown
@@ -73,8 +88,6 @@ const Signup = ({handlechange,form :{form, handleChange,saveAndContinue,formErro
             type="dropdown"
             placeholder='Select State'
             onChange={handleChange}
-          
-            // defaultValue={values.State}
             error={(formError.stateError? true: false)?{content: formError.stateError} : false}
             search
             selection
@@ -91,35 +104,40 @@ const Signup = ({handlechange,form :{form, handleChange,saveAndContinue,formErro
             type='email'
             placeholder='Email Address'
             onChange={handleChange}
-            // defaultValue={values.email}
             error={(formError.emailError? true: false)?{content: formError.emailError} : false}
           />
-        <Form.Input
-            fluid
-            label='Password'
-            icon='lock'
-            iconPosition='left'
-            placeholder='Password'
-            name = "password"
-            value={form.password||""}
-            type='password'
-            onChange={handleChange}
-            // defaultValue={values.password}
-            error= {(formError.passwordError? true: false)?{content: formError.passwordError} : false}
-          />
-          <Form.Input
-            fluid
-            label='Confirm Password'
-            icon='lock'
-            iconPosition='left'
-            placeholder='Password'
-            name = "confirmPassword"
-            value={form.confirmPassword||""}
-            type='password'
-            onChange={handleChange}
-            // defaultValue={values.confirmPassword}
-            error= {(formError.confirmPasswordError? true: false)?{content: formError.confirmPasswordError} : false}
-          />
+        <Form.Field style={{ position: 'relative' }}>
+              <Form.Input
+                fluid
+                width="14"
+                icon='lock'
+                label="Password"
+                iconPosition='left'
+                placeholder='Password'
+                type={passwordType}
+                name="password"
+                value={form.password||""} 
+                onChange={handleChange}
+                error={(formError.passwordError? true: false)?{content: formError.passwordError} : false}
+              />
+              <Icon name={icon} link onClick={()=>togglePassword('pass')} className="showicon" style={{top:25}}/>
+          </Form.Field>
+          <Form.Field style={{ position: 'relative' }}>
+              <Form.Input
+                fluid
+                label='Confirm Password'
+                icon='lock'
+                width="14"
+                iconPosition='left'
+                placeholder='Password'
+                name = "confirmPassword"
+                value={form.confirmPassword||""}
+                type={confirm}
+                onChange={handleChange}
+                error= {(formError.confirmPasswordError? true: false)?{content: formError.confirmPasswordError} : false}
+              />
+              <Icon name={confirmicon} link onClick={()=>togglePassword('confim')} className="showicon" style={{top:25}}/>
+              </Form.Field>
           <Button type="submit" >Save And Continue</Button>
       </Segment>
     </Form>
@@ -131,3 +149,27 @@ const Signup = ({handlechange,form :{form, handleChange,saveAndContinue,formErro
 }
 
 export default Signup;
+
+
+// const sleep = (milliseconds) => {
+//   return new Promise(resolve => setTimeout(resolve, milliseconds))
+// }
+// let [count,setCount] = useState(0);
+
+// const doSomething = async () => {
+//   for (; count < 3;) {
+//     await sleep(2000)
+//     setMessage(mess[count]);
+//     await sleep(2000)
+//     count++;
+//   }
+//   }
+// doSomething();
+
+
+// useEffect(()=>{
+//   if(count===3){
+//     setCount(0);
+    
+//   }
+// },[count]);

@@ -1,14 +1,29 @@
-import React, { useEffect } from 'react'
-import { Button, Form, Grid, Header, Segment,Modal } from 'semantic-ui-react'
+import React,{useState} from 'react'
+import { Button, Form, Grid, Header, Segment,Modal,Icon } from 'semantic-ui-react'
+import './Login.css'
+import { useNavigate} from "react-router-dom";
 
-const Login = ({handlechange,form :{form, handleChange,saveAndContinue,formError,setForm,setOpen,open}}) =>{
+const Login = ({handlechange,form :{form, handleChange,saveAndContinue,formError,open,setreset}}) =>{
+
+  const [passwordType, setPasswordType] = useState("password");
+  const [icon,setIcon] = useState("eye");
 
   const handleopen = () =>{
-    setOpen(false);
-    setForm({});
-    handlechange(2); 
+    setreset();
+    console.log(" user completed"); 
   }
 
+  const togglePassword = () =>{
+    if(passwordType === "password"){
+      setPasswordType("text");
+      setIcon("low vision");
+    }else{
+      setPasswordType("password");
+      setIcon("eye");
+    }
+  }
+
+  const navigate = useNavigate();
 
   return (
     <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
@@ -36,32 +51,36 @@ const Login = ({handlechange,form :{form, handleChange,saveAndContinue,formError
                 icon='user' 
                 iconPosition='left'
                 name="email"
+                
                 value={form.email||""} 
                 placeholder='E-mail address' 
                 onChange={handleChange}
                 type='email'
                 error={(formError.emailError? true: false)?{content: formError.emailError} : false}
               />
+              <Form.Field style={{ position: 'relative' }}>
               <Form.Input
                 fluid
+                width="14"
                 icon='lock'
                 iconPosition='left'
                 placeholder='Password'
-                type='password'
+                type={passwordType}
                 name="password"
                 value={form.password||""} 
                 onChange={handleChange}
                 error={(formError.passwordError? true: false)?{content: formError.passwordError} : false}
               />
+              <Icon name={icon} link onClick={togglePassword} className="showicon"/>
+              </Form.Field>
             <a href='#'>Forgot Password?</a>
               <Button color='teal' fluid size='large'  type="submit">
                 Login
               </Button>
             </Segment>
           </Form>
-          <Button color='teal' fluid size='large' onClick={()=>handlechange(2)} >
-           New to us? Sign Up
-          </Button>
+          <Button color='teal' fluid size='large' onClick={()=>navigate("/people/signup")}>
+           New to us? Sign UP</Button>
         </Grid.Column>
       </Grid>
   )

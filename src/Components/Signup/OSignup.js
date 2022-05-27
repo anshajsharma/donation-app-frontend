@@ -1,16 +1,35 @@
-import React from 'react'
-import { Button, Dropdown, Form, Grid, Header, Modal, Segment } from 'semantic-ui-react'
+import React,{useState} from 'react'
+import { Button, Dropdown, Form, Grid, Header, Modal, Segment,Icon } from 'semantic-ui-react'
+import "../Login/Login.css";
+import { useNavigate} from "react-router-dom";
 
+const OSignup = ({form :{form, handleChange,saveAndContinue,formError,countryOptions,open,setreset,setCurrent}}) => {
 
-const OSignup = ({handlechange,form :{form, handleChange,saveAndContinue,formError,countryOptions,open,setOpen,setForm}}) => {
+  setCurrent('org');
+  const [passwordType, setPasswordType] = useState("password");
+  const [confirm,setConfirm] = useState("password");
+  const [icon,setIcon] = useState("eye");
+  const [confirmicon,setConfirmIcon] = useState("eye");
 
-  const handleopen = () => {
-    setOpen(false);
-    setForm({});
-    handlechange(1);
+const togglePassword = (val) =>{
+  if(val === "pass")
+  {
+    setPasswordType(passwordType==="password"?"text":"password");
+    setIcon(icon==="eye"?"low vision":"eye");
+
   }
-   
+  else
+  {
+    setConfirm(confirm==="password"?"text":"password");
+    setConfirmIcon(confirmicon==="eye"?"low vision":"eye");
+  }
+  
+}
+
+  const navigate = useNavigate();
+
   return (
+
     <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
     <Grid.Column style={{ maxWidth: 450 }}>
     <Header textAlign='center'>
@@ -26,7 +45,7 @@ const OSignup = ({handlechange,form :{form, handleChange,saveAndContinue,formErr
         </Modal.Description>
       </Modal.Content>
       <Modal.Actions>
-        <Button onClick={handleopen}>OK</Button>
+        <Button onClick={()=>navigate("/org/login")}>Ok</Button>
       </Modal.Actions>
     </Modal>
     }
@@ -82,30 +101,39 @@ const OSignup = ({handlechange,form :{form, handleChange,saveAndContinue,formErr
             onChange={handleChange}
             error={(formError.emailError? true: false)?{content: formError.emailError} : false}
           />
-        <Form.Input
-            fluid
-            label='Password'
-            icon='lock'
-            iconPosition='left'
-            placeholder='Password'
-            type='password'
-            name="password"
-            value={form.password||""}
-            onChange={handleChange}
-            error={(formError.passwordError? true: false)?{content: formError.passwordError} : false}
-          />
-          <Form.Input
-            fluid
-            label='Confirm Password'
-            icon='lock'
-            iconPosition='left'
-            placeholder='Password'
-            type='password'
-            name="confirmPassword"
-            value={form.confirmPassword||""}
-            onChange={handleChange}
-            error={(formError.confirmPasswordError? true: false)?{content: formError.confirmPasswordError} : false}
-          />
+        <Form.Field style={{ position: 'relative' }}>
+              <Form.Input
+                fluid
+                width="14"
+                label="Password"
+                icon='lock'
+                iconPosition='left'
+                placeholder='Password'
+                type={passwordType}
+                name="password"
+                value={form.password||""} 
+                onChange={handleChange}
+                error={(formError.passwordError? true: false)?{content: formError.passwordError} : false}
+              />
+              <Icon name={icon} link onClick={()=>togglePassword('pass')} className="showicon" style={{top:25}}/>
+          </Form.Field>
+          <Form.Field style={{ position: 'relative' }}>
+              <Form.Input
+                fluid
+                label='Confirm Password'
+                icon='lock'
+                width="14"
+                iconPosition='left'
+                placeholder='Password'
+                name = "confirmPassword"
+                value={form.confirmPassword||""}
+                type={confirm}
+                onChange={handleChange}
+                // defaultValue={values.confirmPassword}
+                error= {(formError.confirmPasswordError? true: false)?{content: formError.confirmPasswordError} : false}
+              />
+              <Icon name={confirmicon} link onClick={()=>togglePassword('cnfirm')} className="showicon" style={{top:25}}/>
+          </Form.Field>
           <Button type="submit" >Save And Continue</Button>
       </Segment>
     </Form>

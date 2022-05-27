@@ -1,18 +1,20 @@
 import React from 'react'
-import Olog from '../Login/Olog'
-import OSignup from '../Signup/OSignup'
-import useform ,{validate} from '../function/formhandle'
+import { Link,Outlet} from "react-router-dom";
+
 
 const Org = () => {
   
-  const [flag,setFlag] = React.useState(1);
+    return(
+      <div>
+        <ul>
+          <li><Link to="login">login org </Link></li>
+          <li><Link to="signup">signup org</Link></li>
+        </ul>
+        <Outlet/>
+      </div>
 
-    switch (flag) {
-      case 1:
-        return <Olog handlechange={setFlag} form={useform()} validate={validate}/>
-      case 2: 
-         return <OSignup handlechange={setFlag} form={useform()} validate={validate}/>
-    }
+    )
+
   }
 
   export default Org;

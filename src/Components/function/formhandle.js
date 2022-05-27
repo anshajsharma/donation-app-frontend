@@ -1,7 +1,11 @@
 import {useState,useEffect} from 'react';
+
+
+
   export default () => {
 
     const [form ,setForm] = useState({});
+    const [current,setCurrent] = useState("");
 
     const handleChange = (e,{name, value}) => {
         // console.log(name, value);
@@ -10,12 +14,26 @@ import {useState,useEffect} from 'react';
 
       const [formError, setFormError] = useState({});
       const [isSubmitting, setIsSubmitting] = useState(false);
+      const [open , setOpen] = useState(false);
       
       const saveAndContinue = (e) => {
         e.preventDefault();
         setIsSubmitting(true);
-        setFormError(validate(form));
+        
+        setFormError(validate(form,current));
+
+        // console.log(form,open,formError);
       }
+     
+        useEffect(() => {
+            if (Object.keys(formError).length === 0 && isSubmitting) {
+            setOpen(true);
+            }
+            else {
+            setIsSubmitting(false);
+            }
+    
+            }, [formError,isSubmitting]);
 
       const countryOptions = [
         { key: 'a', value: 'Andaman and Nicobar Islands', text: 'Andaman and Nicobar Islands' },
@@ -54,52 +72,60 @@ import {useState,useEffect} from 'react';
         { key: 'ah', value: 'West Bengal', text: 'West Bengal' },
       ]
 
-      const [open , setOpen] = useState(false);
-        useEffect(() => {
-                if (Object.keys(formError).length === 0 && isSubmitting) {
-                setOpen(true);
-                }
-                else {
-                setIsSubmitting(false);
-                }
-    
-            }, [formError]);
+      const setreset = () =>{
+          console.log(form);
+        setForm({});
+        setFormError({});
+        setOpen(false);
+        setIsSubmitting(false);
+      }
 
-      return {form, handleChange,saveAndContinue,formError,countryOptions,open,setOpen,setForm,setIsSubmitting};
+
+      return {form, handleChange,saveAndContinue,formError,countryOptions,open,setOpen,setForm,setIsSubmitting,setreset,setCurrent};
 
   }
   
-
-  const  validate = (val) =>{
+  const  validate = (val,type) =>{
     const errors = {};
-    if (!val.firstName || val.firstName.length < 4) {
+    if(type === 'org')
+    {
+        if (!val.OrgName || val.OrgName.length < 4) {
+          if(!val.OrgName)
+          errors.OrgNameError = ' Organisation Name Required';
+          else
+          errors.OrgNameError = ' Organisation Name must be at least 4 characters';
+        }
+        if (!val.estbDate) {
+          errors.estbDateError = 'Required';
+        }
+    }
+
+    if(type === 'user')
+    {
+      if (!val.firstName || val.firstName.length < 4) {
       if(!val.firstName)
       errors.firstNameError = ' First Name Required';
       else
       errors.firstNameError = ' First Name must be at least 4 characters';
-    }
+      }
+    
     if (!val.lastName || val.lastName.length < 4) {
       if(!val.lastName)
       errors.lastNameError = ' Last Name Required';
       else
       errors.lastNameError = ' Last Name must be at least 4 characters';
     }
-    if (!val.email) {
-      errors.emailError = 'Required';
-    }
     if (!val.dob) {
       errors.dobError = 'Required';
     }
-    if (!val.password || val.password.length < 8) {
-      if(!val.password)
-      errors.passwordError = ' Password Required';
-      else
-      errors.passwordError = ' Password must be at least 8 characters';
-    }
-    if (!val.confirmPassword || val.confirmPassword !== val.password || val.confirmPassword.length < 8) {
-      if(!val.confirmPassword)
+  }
+
+  if(type === 'user' || type === 'org')
+  {
+    if (!val?.confirmPassword || val?.confirmPassword !== val.password || val.confirmPassword.length < 8) {
+      if(!val?.confirmPassword)
       errors.confirmPasswordError = ' Confirm Password Required';
-      else if(val.confirmPassword !== val.password)
+      else if(val?.confirmPassword !== val?.password)
       errors.confirmPasswordError = ' Password does not match';
       else
       errors.confirmPasswordError = ' Password must be at least 8 characters';
@@ -110,10 +136,25 @@ import {useState,useEffect} from 'react';
       else
       errors.stateError = ' State not found';
     }
+  }
+        
+    if (!val.email || !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val?.email)) {
+      if(!val.email)
+      errors.emailError = ' Email Required';
+      else
+      errors.emailError = 'Invalid Email';
+    }
+
+    if (!val.password || val.password.length < 8) {
+        if(!val?.password)
+        errors.passwordError = ' Password Required';
+        else
+        errors.passwordError = ' Password must be at least 8 characters';
+      }
 
     return errors;
+}
+  
 
-  }
 
-
-  export  {validate};
+  export  {validate}
