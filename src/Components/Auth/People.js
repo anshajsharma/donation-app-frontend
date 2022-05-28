@@ -1,15 +1,16 @@
 import React from 'react'
-import { Link,Outlet } from "react-router-dom";
-import History from '../history/history'
+import { Link,Outlet,useNavigate } from "react-router-dom";
+import{Button} from 'semantic-ui-react'
 const People = () => {
-  
+  const navigate = useNavigate();
     return(
       <div>
-        <History/>
+        
         <ul>
           <li><Link to="login">login user</Link></li>
           <li><Link to="signup">signup user</Link></li>
         </ul>
+        <Button color="teal" onClick={()=>navigate("/org")} >Login As Organisation</Button>
         <Outlet/>
       </div>
 

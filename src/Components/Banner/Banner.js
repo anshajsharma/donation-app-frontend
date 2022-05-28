@@ -38,16 +38,16 @@ function Banner() {
              transition: `all 0.8s ease-in-out`
          }}>
             <div className="banner__contents">
-                <h1 className="banner__title">
-                Foundation
+                <h1 style={{ fontSize : 30}} className="banner__title">
+                Donation App
                 </h1>
-                <p>Login/Signup as</p>
+                <p> Login/Signup as</p>
             <div className="banner__buttons">
-                <button className="banner__button" onClick={()=>navigate("/org")}>Organisation</button>
-                <button className="banner__button"  onClick={()=>navigate("/people")}>People</button>
+                <button style={{ fontSize : 30}} className="banner__button" onClick={()=>navigate("/org")}>I am Looking to Provide Help</button>
+                <button style={{ fontSize : 30}} className="banner__button"  onClick={()=>navigate("/people")}>I am Looking For Help</button>
             </div>
             <h1 className="banner__description">
-            A computer is a digital electronic machine that can be programmed to carry out sequences of arithmetic or logical operations (computation) automatically. Modern computers can perform generic sets of operations known as programs. These programs enable computers to perform a wide range of tasks. A computer system is a "complete" computer that includes the hardware, operating system (main software), and peripheral equipment needed and used for "full" operation. 
+            Welcome to Our Donation App
             </h1>
             </div>
             {/* <div className="banner--fadeBottom"/> */}
