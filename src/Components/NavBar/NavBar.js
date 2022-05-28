@@ -10,7 +10,7 @@ export class NavBar extends Component {
     const { activeItem } = this.state
 
     return (
-      <Menu stackable>
+      <Menu stackable style={{margin:"0 0"}}>
         <Menu.Item>
           <img alt="logo" src='/logo.png' />
         </Menu.Item>

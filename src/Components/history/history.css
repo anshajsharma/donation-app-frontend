@@ -1,0 +1,33 @@
+
+.cont{
+    display: flex;
+    width: 100%;
+    margin: 10px 0 0 0;
+    align-items: center;
+}
+
+.lefticon{
+    margin:5px auto 0 0 !important ;
+    font-size:30px !important ;
+    color: rgba(51, 51, 51, 0.5);
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.righticon{
+    margin:0 5px 0 auto !important;
+    font-size:30px !important;
+    color: rgba(51, 51, 51, 0.5);
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.lefticon:hover{
+    color:black;
+    transform: scale(1.2);
+}
+
+.righticon:hover{
+    color:black;
+    transform: scale(1.2);
+}

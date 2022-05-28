@@ -39,7 +39,7 @@ function Banner() {
          }}>
             <div className="banner__contents">
                 <h1 className="banner__title">
-                Title
+                Foundation
                 </h1>
                 <p>Login/Signup as</p>
             <div className="banner__buttons">
