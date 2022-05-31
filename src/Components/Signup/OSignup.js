@@ -1,15 +1,57 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import { Button, Dropdown, Form, Grid, Header, Modal, Segment,Icon } from 'semantic-ui-react'
 import "../Login/Login.css";
 import { useNavigate} from "react-router-dom";
 
-const OSignup = ({form :{form, handleChange,saveAndContinue,formError,countryOptions,open,setreset,setCurrent}}) => {
+const OSignup = ({form :{form, handleChange,saveAndContinue,formError,countryOptions,open,setreset,setOpen,setCurrent}}) => {
 
   setCurrent('org');
   const [passwordType, setPasswordType] = useState("password");
   const [confirm,setConfirm] = useState("password");
   const [icon,setIcon] = useState("eye");
   const [confirmicon,setConfirmIcon] = useState("eye");
+  const [modOpen,setModopen] = useState(false);
+
+  const handleopen = () =>{
+    setModopen(false);
+    console.log(" user completed"); 
+    navigate("/org/login");
+    setreset();
+  }
+
+  async function fetchData(){
+    const response = await fetch('http://localhost:3000/signup',{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: form.email,
+        password: form.password,
+        phoneNo: form.phoneNo,
+        state: form.state,
+        userType: "Organisation",
+        name: form.name,
+        date: form.date,
+
+      })
+    });
+    const data = await response.json();
+    console.log(data);
+    if(data.msg === "User created successfully......"){
+      console.log("success");
+      setModopen(true);
+    }else{
+      setOpen(false);
+      console.log("error");
+    }
+  }
+  useEffect(()=>{
+    if(open){
+      fetchData();
+    }
+
+  },[open]);
 
 const togglePassword = (val) =>{
   if(val === "pass")
@@ -36,8 +78,8 @@ const togglePassword = (val) =>{
       <h1>Enter Organisation Details</h1>
     </Header>
 
-    {open && 
-      <Modal open={open}>
+    {modOpen && 
+      <Modal open={modOpen}>
       <Modal.Header>Thank you!</Modal.Header>
       <Modal.Content>
         <Modal.Description>
@@ -45,7 +87,7 @@ const togglePassword = (val) =>{
         </Modal.Description>
       </Modal.Content>
       <Modal.Actions>
-        <Button onClick={()=>navigate("/org/login")}>Ok</Button>
+        <Button onClick={handleopen}>Ok</Button>
       </Modal.Actions>
     </Modal>
     }
@@ -55,11 +97,10 @@ const togglePassword = (val) =>{
         <Form.Input
             label='Organisation Name'
             placeholder='Organisation Name'
-            name="OrgName"
-            value={form.OrgName||""}
+            name="name"
+            value={form.name||""}
             onChange={handleChange}
             error={(formError.OrgNameError? true: false)?{content: formError.OrgNameError} : false}
-      
           />
 
         <Dropdown
@@ -83,10 +124,23 @@ const togglePassword = (val) =>{
             iconPosition="left"
             type='date'
             placeholder='Establishment Date'
-            name="estbDate"
-            value={form.estbDate||""}
+            name="date"
+            value={form.date||""}
             onChange={handleChange}
-            error={(formError.estbDateError? true: false)?{content: formError.estbDateError} : false}
+            error={(formError.dateError? true: false)?{content: formError.dateError} : false}
+          />
+
+          <Form.Input
+            fluid
+            label='Phone no.'
+            icon="phone"
+            iconPosition="left"
+            type='text'
+            placeholder='Phone no.'
+            name="phoneNo"
+            value={form.phoneNo||""}
+            onChange={handleChange}
+            error={(formError.phoneNoError? true: false)?{content: formError.phoneNoError} : false}
           />
 
         <Form.Input
