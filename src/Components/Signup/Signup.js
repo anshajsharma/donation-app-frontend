@@ -1,9 +1,9 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import { Button, Form, Grid, Header, Segment, Dropdown,Modal,Icon } from 'semantic-ui-react'
 import "../Login/Login.css"
 import { useNavigate} from "react-router-dom";
 
-const Signup = ({form :{form, handleChange,saveAndContinue,formError,countryOptions,open,setreset,setCurrent}}) => {
+const Signup = ({form :{form, handleChange,saveAndContinue,formError,countryOptions,open,setreset,setOpen,setCurrent}}) => {
 
   setCurrent('user');
   
@@ -11,6 +11,51 @@ const [passwordType, setPasswordType] = useState("password");
 const [confirm,setConfirm] = useState("password");
 const [icon,setIcon] = useState("eye");
 const [confirmicon,setConfirmIcon] = useState("eye");
+const [modOpen,setModopen] = useState(false);
+
+  const handleopen = () =>{
+    setModopen(false);
+    console.log(" user completed"); 
+    navigate("/people/login");
+    setreset();
+  }
+
+  async function fetchData(){
+    const response = await fetch('http://localhost:3000/signup',{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: form.email,
+        password: form.password,
+        phoneNo: form.phoneNo,
+        state: form.state,
+        userType: "Individual",
+        name: form.name,
+        lastName: form.lastName,
+        date: form.date,
+
+      })
+    });
+    const data = await response.json();
+    console.log(data);
+    if(data.msg === "User created successfully......"){
+      console.log("success");
+      setModopen(true);
+    }else{
+      setOpen(false);
+      console.log("error");
+    }
+  }
+  useEffect(()=>{
+    if(open){
+      fetchData();
+    }
+
+  },[open]);
+
+
 
 const togglePassword = (val) =>{
 if(val === "pass")
@@ -35,8 +80,8 @@ const navigate = useNavigate();
     <Header textAlign='center'>
       <h1>Enter User Details</h1>
     </Header>
-    {open && 
-      <Modal open={open}>
+    {modOpen && 
+      <Modal open={modOpen}>
       <Modal.Header>Thank you!</Modal.Header>
       <Modal.Content>
         <Modal.Description>
@@ -44,7 +89,7 @@ const navigate = useNavigate();
         </Modal.Description>
       </Modal.Content>
       <Modal.Actions>
-        <Button onClick={()=>navigate("/people/login")}>Ok</Button>
+        <Button onClick={handleopen}>Ok</Button>
       </Modal.Actions>
     </Modal>
     }
@@ -52,11 +97,11 @@ const navigate = useNavigate();
       <Segment>
         <Form.Input
             label='First Name'
-            name="firstName"
+            name="name"
             placeholder='First Name'
-            value={form.firstName||""}
+            value={form.name||""}
             onChange={handleChange}
-            error={(formError.firstNameError? true: false)?{content: formError.firstNameError} : false}
+            error={(formError.nameError? true: false)?{content: formError.nameError} : false}
           />
 
         <Form.Input
@@ -71,14 +116,14 @@ const navigate = useNavigate();
         <Form.Input
             fluid
             label='Date of Birth'
-            name="dob"
-            value={form.dob||""}
+            name="date"
+            value={form.date||""}
             icon="calendar"
             iconPosition="left"
             type='date'
             placeholder='Date of Birth'
             onChange={handleChange}
-            error= {(formError.dobError? true: false)?{content: formError.dobError} : false}
+            error= {(formError.dateError? true: false)?{content: formError.dateError} : false}
           />
           <Dropdown
             fluid
@@ -92,6 +137,19 @@ const navigate = useNavigate();
             search
             selection
             options={countryOptions}
+          />
+
+          <Form.Input
+            fluid
+            label='Phone no.'
+            icon="phone"
+            iconPosition="left"
+            type='text'
+            placeholder='Phone no.'
+            name="phoneNo"
+            value={form.phoneNo||""}
+            onChange={handleChange}
+            error={(formError.phoneNoError? true: false)?{content: formError.phoneNoError} : false}
           />
 
         <Form.Input

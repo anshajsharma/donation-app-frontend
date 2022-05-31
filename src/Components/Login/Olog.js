@@ -1,18 +1,55 @@
-import React,{useState} from 'react'
-import { Button, Form, Grid, Header, Segment,Modal,Icon } from 'semantic-ui-react'
+import React,{useState,useEffect} from 'react'
+import { Button, Form, Grid, Header, Segment,Modal,Icon,Message } from 'semantic-ui-react'
 import './Login.css'
 import { useNavigate} from "react-router-dom";
 
-const Olog = ({handlechange,form :{form, handleChange,saveAndContinue,formError,setForm,setOpen,open,setIsSubmitting,setreset}}) =>{
+const Olog = ({form :{form, handleChange,saveAndContinue,formError,setOpen,open,setreset}}) =>{
 
   const [passwordType, setPasswordType] = useState("password");
   const [icon,setIcon] = useState("eye");
+  const [modOpen,setModopen] = useState(false);
+  const [errMessage,setErrMessage] = useState(false);
 
   const handleopen = () =>{
     setreset();
-    console.log("org user completed");
-    // handlechange(2); 
+    console.log(" user completed"); 
+    setModopen(false);
   }
+
+  async function fetchData(){
+    const response = await fetch('http://localhost:3000/login',{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: form.email,
+        password: form.password,
+        userType: 'Organisation'
+      })
+    });
+    const data = await response.json();
+    console.log(data);
+    if(data.msg === "Login successful......"){
+      console.log("success");
+      localStorage.setItem("token",data.token);
+      setErrMessage(false);
+      setModopen(true);
+    }else{
+      setOpen(false);
+      setErrMessage(true);
+      console.log("error");
+    }
+  }
+
+
+  useEffect(()=>{
+    if(open){
+      fetchData();
+    }
+
+  },[open]);
+
 
   const togglePassword = () =>{
     if(passwordType === "password"){
@@ -30,8 +67,8 @@ const Olog = ({handlechange,form :{form, handleChange,saveAndContinue,formError,
    
     <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
     <Grid.Column style={{ maxWidth: 450 }}>
-    {open && 
-  <Modal open={open}>
+    {modOpen && 
+  <Modal open={modOpen}>
   
   <Modal.Content>
     <Modal.Description>
@@ -46,6 +83,13 @@ const Olog = ({handlechange,form :{form, handleChange,saveAndContinue,formError,
       <Header as='h2' color='teal' textAlign='center'>
         Log-in to your account
       </Header>
+      {
+            errMessage && 
+            <Message negative>
+            <p>Invalid email or password*</p>
+            </Message>
+      }
+        
       <Form size='large' onSubmit={saveAndContinue}>
         <Segment stacked>
           <Form.Input fluid 

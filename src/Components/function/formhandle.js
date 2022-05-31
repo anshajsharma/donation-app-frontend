@@ -1,7 +1,5 @@
 import {useState,useEffect} from 'react';
 
-
-
   export default () => {
 
     const [form ,setForm] = useState({});
@@ -87,56 +85,58 @@ import {useState,useEffect} from 'react';
   
   const  validate = (val,type) =>{
     const errors = {};
-    if(type === 'org')
-    {
-        if (!val.OrgName || val.OrgName.length < 4) {
-          if(!val.OrgName)
-          errors.OrgNameError = ' Organisation Name Required';
-          else
-          errors.OrgNameError = ' Organisation Name must be at least 4 characters';
-        }
-        if (!val.estbDate) {
-          errors.estbDateError = 'Required';
-        }
-    }
-
+   
     if(type === 'user')
     {
-      if (!val.firstName || val.firstName.length < 4) {
-      if(!val.firstName)
-      errors.firstNameError = ' First Name Required';
-      else
-      errors.firstNameError = ' First Name must be at least 4 characters';
+      if (!val.lastName || val.lastName.length < 3) 
+      {
+        if(!val.lastName)
+        errors.lastNameError = ' First Name Required';
+        else
+        errors.lastNameError = ' First Name must be at least 3 characters';
       }
+    }
     
-    if (!val.lastName || val.lastName.length < 4) {
-      if(!val.lastName)
-      errors.lastNameError = ' Last Name Required';
-      else
-      errors.lastNameError = ' Last Name must be at least 4 characters';
-    }
-    if (!val.dob) {
-      errors.dobError = 'Required';
-    }
-  }
+    if(type === 'user' || type === 'org')
+    {
 
-  if(type === 'user' || type === 'org')
-  {
-    if (!val?.confirmPassword || val?.confirmPassword !== val.password || val.confirmPassword.length < 8) {
-      if(!val?.confirmPassword)
-      errors.confirmPasswordError = ' Confirm Password Required';
-      else if(val?.confirmPassword !== val?.password)
-      errors.confirmPasswordError = ' Password does not match';
-      else
-      errors.confirmPasswordError = ' Password must be at least 8 characters';
+      if(!val.name || val.name.length < 4)
+      {
+        if(!val.name)
+        errors.nameError = ' Name Required';
+        else
+        errors.nameError = ' Name must be at least 4 characters';
+
+      }
+      
+      if (!val?.confirmPassword || val?.confirmPassword !== val.password || val.confirmPassword.length < 8) {
+        if(!val?.confirmPassword)
+        errors.confirmPasswordError = ' Confirm Password Required';
+        else if(val?.confirmPassword !== val?.password)
+        errors.confirmPasswordError = ' Password does not match';
+        else
+        errors.confirmPasswordError = ' Password must be at least 8 characters';
+      }
+      if (!val.state ) {
+        if(!val.state)
+        errors.stateError = ' State Required';
+        else
+        errors.stateError = ' State not found';
+      }
+
+      if(!val.phoneNo || val.phoneNo.length < 10){
+        if(!val.phoneNo)
+        errors.phoneNoError = ' Phone No. Required';
+        else
+        errors.phoneNoError = ' Phone No. must be at least 10 characters';
+      }
+
+      if(!val.date)
+      {
+        errors.dateError = ' Date Required';
+      }
+
     }
-    if (!val.state ) {
-      if(!val.state)
-      errors.stateError = ' State Required';
-      else
-      errors.stateError = ' State not found';
-    }
-  }
         
     if (!val.email || !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val?.email)) {
       if(!val.email)
