@@ -58,9 +58,9 @@ function Navbar() {
           <div className = "nav-items"> 
               <div > <a href="#">Home</a> </div>
               <div> <a href = "#">About Us</a></div>
-              <div><a href = ""> FAQ's</a></div>
-              <div> <a href = "">Contact Us</a></div>
-              <div><a href = "" >Login </a></div>
+              <div><a href = "#"> FAQ's</a></div>
+              <div> <a href = "#">Contact Us</a></div>
+              <div><a href = "#" >Login</a></div>
 
           </div>
 
