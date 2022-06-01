@@ -82,12 +82,12 @@ ul{
 	text-align: center;
 	line-height: 40px;
 	border-radius: 50%;
-	color: #ff7070;
+	color: #fcaaaa;
 	transition: all 0.5s ease;
 }
 .footer-col .social-links a:hover{
 	color: #24262b;
-	background-color: #141ea1;
+	background-color: #8ec03d;
 }
 
 /*responsive*/
@@ -102,18 +102,3 @@ ul{
     width: 100%;
 }
 }
-#footer .twitter {
-	background-image: url(http://manstyle.coralixthemes.com/dark/img/dark/icons/footer-icons.png);
-	background-repeat: no-repeat;
-	background-position: 0 0;
-  }
-  #footer .linkedin {
-	background-image: url(http://manstyle.coralixthemes.com/dark/img/dark/icons/footer-icons.png);
-	background-repeat: no-repeat;
-	background-position: -78px 0;
-  }
-  #footer .facebook {
-	background-image: url(http://manstyle.coralixthemes.com/dark/img/dark/icons/footer-icons.png);
-	background-repeat: no-repeat;
-	background-position: -233px 0;
-  }
