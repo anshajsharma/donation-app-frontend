@@ -36,13 +36,10 @@ export default function Footer() {
   	 		<div class="footer-col">
   	 			<h4>follow us</h4>
   	 			<div class="social-links">
-					   <section id="footer" class="py-5">
-							<div class="container text-center">
-								<a href="#" class="twitter"></a>
-								<a href="#" class="linkedin"></a>
-								<a href="#" class="facebook"></a>
-							</div>
-                        </section>
+					<a href="https://www.facebook.com/"><Icon name='facebook' /></a>
+  	 				<a href="https://twitter.com/i/flow/login" ><Icon name='twitter' /></a>
+  	 				<a href="https://www.instagram.com/?hl=en" ><Icon name='instagram' /></a>
+  	 				<a href="https://www.linkedin.com/signup" ><Icon name='linkedin' /></a>
   	 			</div>
   	 		</div>
   	 	</div>
