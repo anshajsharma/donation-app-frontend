@@ -9,6 +9,7 @@ import Olog from './Components/Login/Olog'
 import OSignup from './Components/Signup/OSignup'
 import Login from './Components/Login/Login'
 import Signup from './Components/Signup/Signup'
+import Forgot from './Components/Forgot/Forgot'
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
             <Route path="login" element={<Login  form={useform()} validate={validate}/>} />
             <Route path="signup" element={<Signup  form={useform()} validate={validate}/>} />
           </Route>
+          <Route path="forgot" element={<Forgot form={useform()} validate={validate}/>}></Route>
       </Routes>
   );
 }

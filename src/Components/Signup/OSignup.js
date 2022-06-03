@@ -1,17 +1,17 @@
 import React,{useState,useEffect} from 'react'
-import { Button, Dropdown, Form, Grid, Header, Modal, Segment,Icon } from 'semantic-ui-react'
+import { Button, Dropdown, Form, Grid, Header, Modal, Segment,Icon,Message } from 'semantic-ui-react'
 import "../Login/Login.css";
 import { useNavigate} from "react-router-dom";
 
-const OSignup = ({form :{form, handleChange,saveAndContinue,formError,countryOptions,open,setreset,setOpen,setCurrent}}) => {
+const OSignup = ({form :{form, handleChange,saveAndContinue,formError,countryOptions,open,errMessage,message,modOpen,
+  setreset,fetchData,setCurrent,setModopen}}) => {
 
   setCurrent('org');
   const [passwordType, setPasswordType] = useState("password");
   const [confirm,setConfirm] = useState("password");
   const [icon,setIcon] = useState("eye");
   const [confirmicon,setConfirmIcon] = useState("eye");
-  const [modOpen,setModopen] = useState(false);
-
+ 
   const handleopen = () =>{
     setModopen(false);
     console.log(" user completed"); 
@@ -19,13 +19,9 @@ const OSignup = ({form :{form, handleChange,saveAndContinue,formError,countryOpt
     setreset();
   }
 
-  async function fetchData(){
-    const response = await fetch('http://localhost:3000/signup',{
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
+  useEffect(()=>{
+    if(open){
+      let data = {
         email: form.email,
         password: form.password,
         phoneNo: form.phoneNo,
@@ -33,22 +29,8 @@ const OSignup = ({form :{form, handleChange,saveAndContinue,formError,countryOpt
         userType: "Organisation",
         name: form.name,
         date: form.date,
-
-      })
-    });
-    const data = await response.json();
-    console.log(data);
-    if(data.msg === "User created successfully......"){
-      console.log("success");
-      setModopen(true);
-    }else{
-      setOpen(false);
-      console.log("error");
-    }
-  }
-  useEffect(()=>{
-    if(open){
-      fetchData();
+      }
+      fetchData('http://localhost:3000/signup',data,"signup","POST");
     }
 
   },[open]);
@@ -91,6 +73,12 @@ const togglePassword = (val) =>{
       </Modal.Actions>
     </Modal>
     }
+          {
+            errMessage && 
+            <Message negative>
+            <p>{message}</p>
+            </Message>
+          }
 
     <Form onSubmit={saveAndContinue}>
       <Segment>
@@ -100,7 +88,7 @@ const togglePassword = (val) =>{
             name="name"
             value={form.name||""}
             onChange={handleChange}
-            error={(formError.OrgNameError? true: false)?{content: formError.OrgNameError} : false}
+            error={(formError.nameError? true: false)?{content: formError.nameError} : false}
           />
 
         <Dropdown

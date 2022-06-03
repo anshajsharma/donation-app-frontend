@@ -3,12 +3,15 @@ import { Button, Form, Grid, Header, Segment,Modal,Icon,Message } from 'semantic
 import './Login.css'
 import { useNavigate} from "react-router-dom";
 
-const Olog = ({form :{form, handleChange,saveAndContinue,formError,setOpen,open,setreset}}) =>{
+const Olog = ({form :{form, handleChange,saveAndContinue,formError,open,
+  setreset,errMessage,message,modOpen,fetchData,setModopen,setCurrent
+}})  =>{
+
+  setCurrent('login');
 
   const [passwordType, setPasswordType] = useState("password");
   const [icon,setIcon] = useState("eye");
-  const [modOpen,setModopen] = useState(false);
-  const [errMessage,setErrMessage] = useState(false);
+
 
   const handleopen = () =>{
     setreset();
@@ -16,36 +19,16 @@ const Olog = ({form :{form, handleChange,saveAndContinue,formError,setOpen,open,
     setModopen(false);
   }
 
-  async function fetchData(){
-    const response = await fetch('http://localhost:3000/login',{
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        email: form.email,
-        password: form.password,
-        userType: 'Organisation'
-      })
-    });
-    const data = await response.json();
-    console.log(data);
-    if(data.msg === "Login successful......"){
-      console.log("success");
-      localStorage.setItem("token",data.token);
-      setErrMessage(false);
-      setModopen(true);
-    }else{
-      setOpen(false);
-      setErrMessage(true);
-      console.log("error");
-    }
-  }
-
+ 
 
   useEffect(()=>{
     if(open){
-      fetchData();
+      let data = {
+        email: form.email,
+        password: form.password,
+        userType: 'Organisation'
+      }
+      fetchData("http://localhost:3000/login",data,"login","POST");
     }
 
   },[open]);
@@ -86,7 +69,7 @@ const Olog = ({form :{form, handleChange,saveAndContinue,formError,setOpen,open,
       {
             errMessage && 
             <Message negative>
-            <p>Invalid email or password*</p>
+            <p>{message}</p>
             </Message>
       }
         
@@ -118,7 +101,7 @@ const Olog = ({form :{form, handleChange,saveAndContinue,formError,setOpen,open,
           />
           <Icon name={icon} link onClick={togglePassword} className="showicon"/>
           </Form.Field>
-        <a href='#'>Forgot Password?</a>
+        <a onClick={()=>navigate("/forgot")} link style={{cursor:"pointer"}}>Forgot Password?</a>
           <Button color='teal' fluid size='large'  type="submit">
             Login
           </Button>
