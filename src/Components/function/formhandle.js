@@ -6,22 +6,51 @@ import {useState,useEffect} from 'react';
     const [current,setCurrent] = useState("");
 
     const handleChange = (e,{name, value}) => {
-        // console.log(name, value);
           setForm({...form, [name]: value});
       }
 
       const [formError, setFormError] = useState({});
       const [isSubmitting, setIsSubmitting] = useState(false);
       const [open , setOpen] = useState(false);
+      const [errMessage,setErrMessage] = useState(false);
+      const [message,setMessage] = useState("");
+      const [forgot,setForgot] = useState(false);
+      const [modOpen,setModopen] = useState(false);
       
       const saveAndContinue = (e) => {
         e.preventDefault();
         setIsSubmitting(true);
-        
         setFormError(validate(form,current));
-
-        // console.log(form,open,formError);
       }
+
+      
+  async function fetchData(url,dt,type,method){
+    const response = await fetch(url,{
+      method: method,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        ...dt
+      })
+    });
+    const data = await response.json();
+    console.log(data);
+    if(data.msg.includes("Sucess")){
+      setModopen(true);
+
+      if(type==="Login"){
+        localStorage.setItem("token",data.token);
+      }
+      
+      setErrMessage(false);
+      setMessage("");
+    }else{
+      setOpen(false);
+      setErrMessage(true);
+      setMessage(data.msg);
+    }
+  }
      
         useEffect(() => {
             if (Object.keys(formError).length === 0 && isSubmitting) {
@@ -71,7 +100,6 @@ import {useState,useEffect} from 'react';
       ]
 
       const setreset = () =>{
-          console.log(form);
         setForm({});
         setFormError({});
         setOpen(false);
@@ -79,7 +107,8 @@ import {useState,useEffect} from 'react';
       }
 
 
-      return {form, handleChange,saveAndContinue,formError,countryOptions,open,setOpen,setForm,setIsSubmitting,setreset,setCurrent};
+      return {form, handleChange,saveAndContinue,formError,errMessage,message,forgot,setForgot,
+        countryOptions,open,setOpen,setForm,setIsSubmitting,setreset,setCurrent,setModopen,modOpen,fetchData};
 
   }
   
@@ -109,14 +138,6 @@ import {useState,useEffect} from 'react';
 
       }
       
-      if (!val?.confirmPassword || val?.confirmPassword !== val.password || val.confirmPassword.length < 8) {
-        if(!val?.confirmPassword)
-        errors.confirmPasswordError = ' Confirm Password Required';
-        else if(val?.confirmPassword !== val?.password)
-        errors.confirmPasswordError = ' Password does not match';
-        else
-        errors.confirmPasswordError = ' Password must be at least 8 characters';
-      }
       if (!val.state ) {
         if(!val.state)
         errors.stateError = ' State Required';
@@ -137,6 +158,25 @@ import {useState,useEffect} from 'react';
       }
 
     }
+
+    if(type === 'org' || type === 'user' || type === "forgot")
+    {
+      if (!val?.confirmPassword || val?.confirmPassword !== val.password || val.confirmPassword.length < 8) {
+        if(!val?.confirmPassword)
+        errors.confirmPasswordError = ' Confirm Password Required';
+        else if(val?.confirmPassword !== val?.password)
+        errors.confirmPasswordError = ' Password does not match';
+        else
+        errors.confirmPasswordError = ' Password must be at least 8 characters';
+      }
+      if (!val.password || val.password.length < 8) {
+        if(!val?.password)
+        errors.passwordError = ' Password Required';
+        else
+        errors.passwordError = ' Password must be at least 8 characters';
+      }
+
+    }
         
     if (!val.email || !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val?.email)) {
       if(!val.email)
@@ -145,13 +185,25 @@ import {useState,useEffect} from 'react';
       errors.emailError = 'Invalid Email';
     }
 
-    if (!val.password || val.password.length < 8) {
+    if(type === 'login')
+    {
+      if (!val.password || val.password.length < 8) {
         if(!val?.password)
         errors.passwordError = ' Password Required';
         else
         errors.passwordError = ' Password must be at least 8 characters';
       }
 
+    }
+
+    if(type === 'forgot'){
+      if(!val.OTP)
+      {
+        errors.OTPError = ' OTP Required';
+      }
+    }
+
+    
     return errors;
 }
   

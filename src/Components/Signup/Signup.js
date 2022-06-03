@@ -1,9 +1,10 @@
 import React,{useState,useEffect} from 'react'
-import { Button, Form, Grid, Header, Segment, Dropdown,Modal,Icon } from 'semantic-ui-react'
+import { Button, Form, Grid, Header, Segment, Dropdown,Modal,Icon,Message } from 'semantic-ui-react'
 import "../Login/Login.css"
 import { useNavigate} from "react-router-dom";
 
-const Signup = ({form :{form, handleChange,saveAndContinue,formError,countryOptions,open,setreset,setOpen,setCurrent}}) => {
+const Signup =  ({form :{form, handleChange,saveAndContinue,formError,countryOptions,open,errMessage,message,modOpen,
+  setreset,fetchData,setCurrent,setModopen}}) => {
 
   setCurrent('user');
   
@@ -11,7 +12,7 @@ const [passwordType, setPasswordType] = useState("password");
 const [confirm,setConfirm] = useState("password");
 const [icon,setIcon] = useState("eye");
 const [confirmicon,setConfirmIcon] = useState("eye");
-const [modOpen,setModopen] = useState(false);
+
 
   const handleopen = () =>{
     setModopen(false);
@@ -20,13 +21,10 @@ const [modOpen,setModopen] = useState(false);
     setreset();
   }
 
-  async function fetchData(){
-    const response = await fetch('http://localhost:3000/signup',{
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
+
+  useEffect(()=>{
+    if(open){
+      let data = {
         email: form.email,
         password: form.password,
         phoneNo: form.phoneNo,
@@ -35,22 +33,8 @@ const [modOpen,setModopen] = useState(false);
         name: form.name,
         lastName: form.lastName,
         date: form.date,
-
-      })
-    });
-    const data = await response.json();
-    console.log(data);
-    if(data.msg === "User created successfully......"){
-      console.log("success");
-      setModopen(true);
-    }else{
-      setOpen(false);
-      console.log("error");
-    }
-  }
-  useEffect(()=>{
-    if(open){
-      fetchData();
+      }
+      fetchData('http://localhost:3000/signup',data,"signup","POST");
     }
 
   },[open]);
@@ -93,6 +77,13 @@ const navigate = useNavigate();
       </Modal.Actions>
     </Modal>
     }
+
+          {
+            errMessage && 
+            <Message negative>
+            <p>{message}</p>
+            </Message>
+          }
     <Form onSubmit={saveAndContinue} >
       <Segment>
         <Form.Input
