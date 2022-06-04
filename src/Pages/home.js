@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Banner from '../Components/Banner/Banner'
 import About from '../Components/About/About'
 import Overview from '../Components/Overview/Overview'
-
+import Footer from '../Components/Footer/Footer'
 export class home extends Component {
   render() {
     return (
@@ -10,6 +10,7 @@ export class home extends Component {
           <Banner />
           <Overview/>
           <About/>
+          <Footer/>
       </div>
     )
   }
