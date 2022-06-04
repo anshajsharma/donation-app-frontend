@@ -10,6 +10,7 @@ import OSignup from './Components/Signup/OSignup'
 import Login from './Components/Login/Login'
 import Signup from './Components/Signup/Signup'
 import Forgot from './Components/Forgot/Forgot'
+import Main from './Pages/Main'
 
 function App() {
 
@@ -26,7 +27,10 @@ function App() {
             <Route path="signup" element={<Signup  form={useform()} validate={validate}/>} />
           </Route>
           <Route path="forgot" element={<Forgot form={useform()} validate={validate}/>}></Route>
+          <Route path="main" element={<Main/>}/>
       </Routes>
+
+      
   );
 }
 

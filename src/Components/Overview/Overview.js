@@ -1,6 +1,7 @@
-import React, { Component } from 'react'
+import React  from 'react'
 import { Carousel } from 'react-carousel-minimal';
-import './Aboutus.css'
+import { Divider } from 'semantic-ui-react';
+import './Overview.css'
 
 
 
@@ -39,7 +40,14 @@ function App() {
   return (
     <div className="App font">
       <div style={{ textAlign: "center" }}>
-        <h2>Overview</h2>
+      <Divider
+          as="h4"
+          className="header"
+          horizontal
+          style={{ margin: "3em 0em", textTransform: "uppercase" }}
+        >
+        <a href="#Overview">Overview</a>
+        </Divider>
         <div style={{padding: "0 20px" }}>
           <Carousel
             data={data}

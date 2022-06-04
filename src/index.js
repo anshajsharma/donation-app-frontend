@@ -3,14 +3,18 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router} from "react-router-dom";
+import Navbar from "./Components/NavBar/NavBar";
+import Donate from "./Components/Donatenow/Donatenow";
 
-// import 'semantic-ui-css/semantic.min.css'
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+  
   <Router>
+    <Navbar/>
      <App />
+    <Donate/>
   </Router>
 );
 
