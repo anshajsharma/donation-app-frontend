@@ -17,6 +17,7 @@ const Olog = ({form :{form, handleChange,saveAndContinue,formError,open,
     setreset();
     console.log(" user completed"); 
     setModopen(false);
+    navigate("/main");
   }
 
  

@@ -44,7 +44,6 @@ const Contact = ({handlechange,form :{form, handleChange,saveAndContinue,formErr
             placeholder='Name'
             value={form.firstName||""}
             onChange={handleChange}
-            // defaultValue={values.firstName}
             error={(formError.firstNameError? true: false)?{content: formError.firstNameError} : false}
           />
           <Dropdown

@@ -8,12 +8,12 @@ const Org = () => {
   const navigate = useNavigate();
   
     return(
-      <div>
+      <div style={{marginTop:"70px"}}>
         <ul>
           <li><Link to="login">login org </Link></li>
           <li><Link to="signup">signup org</Link></li>
         </ul>
-        <Button color="teal" onClick={()=>navigate("/people")} >Login As peopel</Button>
+        <Button color="teal" onClick={()=>navigate("/people")} >Login As people</Button>
         <Outlet/>
       </div>
 
